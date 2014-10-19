@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+<title>Şifrələmə Sistemi</title>
+<h:outputStylesheet library="css" name="client.css" />
+<h:outputStylesheet library="css" name="myButton.css" />
+<h:outputScript library="script" name="jquery-1.11.0.min.js" />
+</h:head>
+<h:body>
+ <script type="text/javascript">
+    $(document).ready(function (){
+        
+        $("h2").fadeOut(2000).fadeIn(1000).fadeOut(1000, 
+                 function(){ //callback
+                    $("#main_div").animate({height:"260px", width:"430px"}, 3000, 
+                        function(){ //callback
+                           $("#div1").fadeIn(800);
+                        }
+                    );
+                });
+ 
+     });//document.ready end
+          
+    function ajaxLoading(data) {
+      if (data.status === "begin") {
+          $("#encryptedKey").hide();
+          $("#loading").show();
+      } else if (data.status === "success") {
+          $("#loading").hide();
+          $("#encryptedKey").show();
+      }
+    };
+    
+  </script>
+    
+ <h:form prependId="false">
+   <h:panelGroup layout="block" id="main_div">
+      <h2>ŞİFRƏLƏMƏ SİSTEMİ</h2>  
+      <h:panelGroup layout="block" id="div1" style="display: none;">
+        <h3>Şifrələnəcək sözü daxil edin</h3>
+        <h:panelGrid columns="2" style="text-align: center">
+            <h:inputText value="#{clientBean.inputText}" size="25"/>
+            <h:commandButton value="Şifrələ" styleClass="myButton">
+              <f:ajax execute="@form" event="click" listener="#{clientBean.ajaxGetEncryptedKey()}" render="encryptedKey" onevent="ajaxLoading"/>
+            </h:commandButton>
+        </h:panelGrid>
+        <br/>
+        <h:panelGroup style="font-size: 80%">Sözlərin şifrələnməsində <h:outputLink  target="blank" value="http://en.wikipedia.org/wiki/MD5">MD5</h:outputLink> alqoritmindən istifadə olunur</h:panelGroup>
+        <br/><br/><br/>
+        <h:outputText value="#{clientBean.encryptedKey}" id="encryptedKey" style="display: block;"/> 
+        <h:panelGroup id="loading" style="display: none; font-size: 70%">
+          <h:graphicImage library="image" name="loading2.gif" width="25" height="25" />
+          Şifrələnir...
+        </h:panelGroup>
+    </h:panelGroup>
+   </h:panelGroup>
+ </h:form>
+</h:body>
+</html>
+
